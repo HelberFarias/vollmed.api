@@ -1,0 +1,1 @@
+ALTER TABLE usuarios CHANGE loguin login VARCHAR(255);

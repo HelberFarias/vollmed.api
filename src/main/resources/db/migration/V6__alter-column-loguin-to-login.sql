@@ -1,0 +1,2 @@
+ALTER TABLE usuarios
+MODIFY login VARCHAR(255) NOT NULL;
