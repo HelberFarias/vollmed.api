@@ -15,6 +15,5 @@ public record DadosAgendamentoConsulta(
 
         @NotNull
         @Future //anotacao que obriga marcar uma data para o futuro
-        @JsonFormat(pattern = "dd/mm/yy HH:mm")
         LocalDateTime data,
         Especialidade especialidade) {}
