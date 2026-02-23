@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import med.voll.api.domain.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities()); //eh preciso instanciar esse objeto enorme ai,tipo um DTO
             SecurityContextHolder.getContext().setAuthentication(authentication); //classe do spring que autentica o usuario na requisicao de forma forcada (set)
-            System.out.println("Logado!");
+
         }
         filterChain.doFilter(request, response);
     }
