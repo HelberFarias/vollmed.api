@@ -39,7 +39,7 @@ public class AgendaDeConsultas {
         if (medico == null) {
             throw new ValidacaoException("Não há disponibilidade de medico nessa data!");
         }
-        var consulta = new Consulta(null, medico, paciente, dados.data(), null); //primeiro atributo é null pq o proprio banco de dados que vai gerar o id
+        var consulta = new Consulta(null, medico, paciente, dados.data()); //primeiro atributo é null pq o proprio banco de dados que vai gerar o id
         consultaRepository.save(consulta);
         return new DadosDetalhamentoConsulta(consulta);
     }

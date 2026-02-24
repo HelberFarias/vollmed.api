@@ -31,7 +31,7 @@ public class ConsultaController {
     @Transactional
     public ResponseEntity remover (@PathVariable Long id) {
         var consulta = repository.getReferenceById(id);
-        consulta.remover(id);
+        consulta.cancelarConsulta();
         return ResponseEntity.noContent().build();
     }
 
