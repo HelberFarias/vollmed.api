@@ -31,10 +31,11 @@ public class Consulta {
     @JoinColumn (name = "paciente_id")
     private Paciente paciente;
     private LocalDateTime data;
-    @Enumerated (EnumType.STRING)
+    @Enumerated (EnumType.STRING) @Column (name = "motivo_cancelamento")
     private MotivoCancelamento motivoCancelamento;
-    @Enumerated (EnumType.STRING)
+    @Enumerated (EnumType.STRING) @Column (name = "status")
     private StatusConsulta status = StatusConsulta.AGENDADA;
+    @Column (name = "data_cancelamento")
     private LocalDateTime dataCancelamento;
 
     public Consulta(Long id, Medico medico, Paciente paciente, LocalDateTime data) {
@@ -57,5 +58,7 @@ public class Consulta {
             throw new ValidacaoException("[ERRO] Consulta já cancelada!");
         }
         this.status = StatusConsulta.CANCELADA;
+        this.motivoCancelamento = motivo;
+        this.dataCancelamento = LocalDateTime.now();
     }
 }

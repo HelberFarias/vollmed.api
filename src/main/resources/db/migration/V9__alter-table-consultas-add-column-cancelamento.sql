@@ -1,0 +1,8 @@
+ALTER TABLE consultas
+ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'AGENDADA';
+
+ALTER TABLE consultas
+ADD COLUMN motivo_cancelamento VARCHAR(100);
+
+ALTER TABLE consultas
+ADD COLUMN data_cancelamento DATETIME;

@@ -8,6 +8,8 @@ import med.voll.api.domain.paciente.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 // as classes services executa as regras de negocios e validacoes da aplicacao
@@ -42,6 +44,17 @@ public class AgendaDeConsultas {
         var consulta = new Consulta(null, medico, paciente, dados.data()); //primeiro atributo é null pq o proprio banco de dados que vai gerar o id
         consultaRepository.save(consulta);
         return new DadosDetalhamentoConsulta(consulta);
+    }
+
+    public void cancelar (DadosCancelamentoConsulta dados) {
+        var consulta = consultaRepository.getReferenceById(dados.idConsulta());
+        var dataConsulta = consulta.getData();
+        var dataCancelamento = LocalDateTime.now();
+        var disponibilidadeCancelamento = Duration.between(dataCancelamento, dataConsulta).toMinutes();
+        if (disponibilidadeCancelamento < 30) {
+            throw new ValidacaoException("Consulta deve cancelar com antecedência supeior a 30 minutos!");
+        }
+        consulta.cancelarConsulta(dados.motivo());
     }
 
     private Medico escolherMedico(DadosAgendamentoConsulta dados) { //temos que devolver um objeto do tipo Medico
