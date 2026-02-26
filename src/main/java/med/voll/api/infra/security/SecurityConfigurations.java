@@ -35,6 +35,7 @@ public class SecurityConfigurations {
                                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authorizeHttpRequests(auth -> { //metodo que configura como que sera as autorizacoes das requisicoes
                             auth.requestMatchers("/login").permitAll(); //o login é a unica requisicao que deve ser aberta
+                            auth.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll(); //permissão para o SpringDoc
                             auth.anyRequest().authenticated(); //qualquer outra requisição, só pode se estiver autenticado
                         })
                         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) //primeira chama o nosso filtro que é a classe toda SecurityFilter, depois o filtro do Spring
