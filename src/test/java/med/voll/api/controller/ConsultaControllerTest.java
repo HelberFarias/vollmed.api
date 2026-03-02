@@ -1,19 +1,68 @@
 package med.voll.api.controller;
 
+import med.voll.api.domain.consulta.DadosAgendamentoConsulta;
+import med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
+import med.voll.api.domain.medico.Especialidade;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+
+@AutoConfigureMockMvc //injeção do MockMVC
 @SpringBootTest //anotação para usar nos controllers
 class ConsultaControllerTest {
 
+    @Autowired
+    private MockMvc mvc; //classe propria do Spring que faz testes unitários, só vai fazer o teste no controller
+    @Autowired
+    private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson; //o tipo no generics tem que ser o mesmo que recebe no metodo no cotroller e esse é o jso que chega da api
+    @Autowired
+    private JacksonTester<DadosDetalhamentoConsulta> dadosDetalhamentoConsultaJson; //json que a API devolve
+
+
     @Test
     @DisplayName ("deveria devolver http400 quando informações estao invalidas analisadas pelo Bean")
-    void agendar_cenario1(){
-        
+    @WithMockUser //anotacao pra pedir ao spring um usuario mockado,
+    void agendar_cenario1() throws Exception {
 
+        var response = mvc.perform(
+                post("/consultas")
+                        .contentType(MediaType.APPLICATION_JSON) //define que o corpo da requisição é JSON
+                        .content("{}") // corpo da requisição que será convertido para o DTO
+                // .with(csrf()) // só se sua Security estiver exigindo CSRF em POST
+        ).andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value()); //HttpStatus é uma classe que tem um metodo para testar o erro 400
     }
 
+    @Test
+    @DisplayName ("Deveria devolver código 200 quando informações forem válidas")
+    @WithMockUser
+    void agendar_cenario2() throws Exception {
+        var data = LocalDateTime.now().plusHours(1);
+        var especialidade = Especialidade.CARDIOLOGIA;
+        var response = mvc.perform(
+                post("/consultas")
+                        .contentType(MediaType.APPLICATION_JSON) //define que o corpo da requisição é JSON
+                        .content (dadosAgendamentoConsultaJson.write(new DadosAgendamentoConsulta(2l, 5l, data, especialidade)).getJson()) // forma feita para não criar a string json manulamente. Pegao tipo do objeto da consulta marcada e faz essa mágica ai
+        ).andReturn().getResponse();
 
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        var jsonEsperado = dadosDetalhamentoConsultaJson.write(
+                new DadosDetalhamentoConsulta(null, 2l, 5l, data)).getJson();
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado.toString()); //pegue o conteudo da resposta e veja se é igual ao conteudo esperado
+    }
 }
