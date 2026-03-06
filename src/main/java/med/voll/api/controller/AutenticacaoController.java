@@ -23,7 +23,7 @@ public class AutenticacaoController {
     private TokenService tokenService ;
 
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticaco dados) {
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticaco dados) { //dto criado para receber login e senha
         var authenticationToken = new UsernamePasswordAuthenticationToken (
                 dados.login(),
                 dados.senha());
