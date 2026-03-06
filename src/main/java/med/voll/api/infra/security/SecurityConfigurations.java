@@ -42,7 +42,7 @@ public class SecurityConfigurations {
                         .build();
     }
 
-    // metodo para autenticacao
+    // metodo que ensina ao Spring a injetar o AuthenticationManager
     @Bean
     public AuthenticationManager manager (AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager(); //metodo requer uma exception

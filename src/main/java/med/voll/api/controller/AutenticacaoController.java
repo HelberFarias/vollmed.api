@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class AutenticacaoController {
     @Autowired
-    private AuthenticationManager manager;
+    private AuthenticationManager manager; //classe que usamos para instanciar a classe de autenticacao (nao pode instanciar a classe de autenticacao de forma direta)
     @Autowired
     private TokenService tokenService ;
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticaco dados) { //dto criado para receber login e senha
-        var authenticationToken = new UsernamePasswordAuthenticationToken (
+        var authenticationToken = new UsernamePasswordAuthenticationToken ( //instanciamos esse objeto para converter um tipo de DTO para outro que o authentication exige
                 dados.login(),
                 dados.senha());
         var authentication = manager.authenticate(authenticationToken);
