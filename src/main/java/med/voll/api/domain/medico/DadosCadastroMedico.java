@@ -20,5 +20,5 @@ public record DadosCadastroMedico(
         @NotNull //usado apenas para string, diferente de NotBlank que verifica se o campo ta null ou vazio
         Especialidade especialidade,
         @NotNull @Valid // quando dentro de um DTO tem outro DTO, vc avisa com o Valid que é pra validar o outro DTO
-        DadosEndereco endereco) {
-}
+        DadosEndereco endereco)
+{}

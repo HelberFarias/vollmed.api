@@ -16,10 +16,10 @@ import java.util.List;
 @Entity (name = "Usuarios")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id") // gera equals e hashCode usando apenas o id para comparar objetos
 @Getter
 
-public class Usuario implements UserDetails { //UserDetails serve para avisar ao Spring Security dos atributos dessa classe
+public class Usuario implements UserDetails { //UserDetails serve para avisar que classe representa um usuário do sistema
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
